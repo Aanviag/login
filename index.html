@@ -30,6 +30,7 @@
       <button class="nav-pill" data-page="home">Estimator</button>
       <button class="nav-pill" data-page="counties">County snapshot</button>
       <button class="nav-pill" data-page="resources">Resources</button>
+      <button class="nav-pill" data-page="saved">Saved scores</button>
       <button class="btn btn-outline btn-sm" id="auth-link" style="margin-left:8px;">Sign out</button>
     </nav>
     <button class="mobile-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
@@ -38,6 +39,7 @@
     <button class="nav-pill" data-page="home">Estimator</button>
     <button class="nav-pill" data-page="counties">County snapshot</button>
     <button class="nav-pill" data-page="resources">Resources</button>
+    <button class="nav-pill" data-page="saved">Saved scores</button>
     <button class="btn btn-outline btn-sm" id="auth-link-mobile" style="margin-top:4px;">Sign out</button>
   </div>
   <div id="data-status" class="data-status"></div>
@@ -110,6 +112,8 @@
         </div>
         <p id="score-note"></p>
         <p id="county-note"></p>
+        <button class="btn btn-outline-dark btn-sm" id="save-score-btn" style="margin-top:20px;">☆ Save this score</button>
+        <p class="save-score-note" id="save-score-note"></p>
       </div>
 
       <div class="card">
@@ -223,6 +227,31 @@
       <div class="resources-grid" id="resources-grid"></div>
       <div class="card hidden" id="resources-empty">
         <p class="muted">No organizations match those filters yet. Try a different county or type of help.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SAVED SCORES ============================ -->
+  <section id="page-saved" class="hidden">
+    <div class="hero" style="min-height:0;">
+      <div class="hero-overlay" style="background:var(--navy);"></div>
+      <div class="hero-inner small">
+        <div class="eyebrow">04 / YOUR SAVED SCORES</div>
+        <h1 class="headline mid">Every plan you've run, in one place.</h1>
+        <p class="hero-lede">Saved to this browser under your account. Save a score from the estimator to add it here.</p>
+      </div>
+    </div>
+    <div class="page-section">
+      <div class="card card-shadow" id="saved-latest-card">
+        <h2 style="margin-bottom:8px;">Most recent</h2>
+        <div id="saved-latest"></div>
+      </div>
+      <div class="card" id="saved-history-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+          <h3 style="margin:0;">Saved history</h3>
+          <button class="btn btn-outline btn-sm" id="clear-saved-btn">Clear all</button>
+        </div>
+        <div id="saved-history"></div>
       </div>
     </div>
   </section>

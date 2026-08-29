@@ -163,6 +163,16 @@ input[type="range"]::-moz-range-thumb {
 
 .info-bar { display: flex; gap: 10px; align-items: flex-start; margin-top: 24px; padding: 14px 16px; border-radius: 8px; background: #EFEDE6; font-size: 13px; color: var(--muted); }
 
+/* saved scores */
+.save-score-note { font-size: 13px; margin-top: 8px; min-height: 18px; color: var(--green); }
+.saved-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.saved-row:last-child { border-bottom: none; }
+.saved-row-main { font-size: 14px; }
+.saved-row-main strong { font-family: 'Lora', serif; }
+.saved-row-meta { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.saved-row-score { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 18px; flex-shrink: 0; }
+.saved-empty { color: var(--muted); font-size: 14px; }
+
 /* metric pills (county page) */
 #metric-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .metric-pill { padding: 10px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; background: var(--cream); color: var(--navy); border: 1px solid var(--line); }

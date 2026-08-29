@@ -699,6 +699,33 @@ function renderCounties() {
   renderCountyBarChart($("#bar-chart"), rows.map((r) => r.name), rows.map((r) => r.value), leader.name);
 }
 
+function formatSavedSnapshot(s) {
+  const when = new Date(s.savedAt).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  return `
+    <div class="saved-row">
+      <div class="saved-row-main">
+        <strong>${s.county}</strong> · ${s.businessType}
+        <div class="saved-row-meta">${s.employees} employee${s.employees === 1 ? "" : "s"} · $${s.rent.toLocaleString()}/mo rent · saved ${when}</div>
+      </div>
+      <div class="saved-row-score">${s.overall} <span class="small muted">${s.verdict}</span></div>
+    </div>`;
+}
+
+function renderSaved() {
+  const data = getScoreData();
+  const latestEl = $("#saved-latest");
+  const historyEl = $("#saved-history");
+  if (!latestEl || !historyEl) return;
+
+  latestEl.innerHTML = data.latest
+    ? formatSavedSnapshot(data.latest)
+    : `<p class="saved-empty">Nothing saved yet — run the estimator and click "Save this score".</p>`;
+
+  historyEl.innerHTML = data.history.length
+    ? data.history.map(formatSavedSnapshot).join("")
+    : `<p class="saved-empty">No saved history yet.</p>`;
+}
+
 function renderResources() {
   const filtered = RESOURCES.filter((r) => {
     const countyOk = state.filterCounty === "all" || r.county === "all" || r.county === state.filterCounty;
@@ -744,6 +771,7 @@ function renderAll() {
   renderHome();
   renderCounties();
   renderResources();
+  renderSaved();
 }
 
 /* ----------------------------- wiring ----------------------------------*/
@@ -757,6 +785,7 @@ function setPage(page) {
   if (state.economicData) {
     if (page === "home") renderHome();
     if (page === "counties") renderCounties();
+    if (page === "saved") renderSaved();
   }
 }
 
@@ -788,16 +817,8 @@ function initStaticUi() {
   });
   $("#compare-counties-btn-2").addEventListener("click", () => setPage("counties"));
 
-  $("#county-select").addEventListener("change", (e) => {
-    state.countyId = e.target.value;
-    renderHome();
-    pushScoreHistory(getScoreData().latest);
-  });
-  $("#business-select").addEventListener("change", (e) => {
-    state.businessId = e.target.value;
-    renderHome();
-    pushScoreHistory(getScoreData().latest);
-  });
+  $("#county-select").addEventListener("change", (e) => { state.countyId = e.target.value; renderHome(); });
+  $("#business-select").addEventListener("change", (e) => { state.businessId = e.target.value; renderHome(); });
   $("#rent-slider").addEventListener("input", (e) => { state.rent = Number(e.target.value); renderHome(); });
   $("#employees-slider").addEventListener("input", (e) => { state.employees = Number(e.target.value); renderHome(); });
 
@@ -824,6 +845,22 @@ function initStaticUi() {
   };
   $("#auth-link")?.addEventListener("click", doSignOut);
   $("#auth-link-mobile")?.addEventListener("click", doSignOut);
+
+  $("#save-score-btn").addEventListener("click", () => {
+    const data = getScoreData();
+    if (!data.latest) return;
+    pushScoreHistory(data.latest);
+    const note = $("#save-score-note");
+    note.textContent = "Saved ✓";
+    renderSaved();
+    setTimeout(() => { if (note.textContent === "Saved ✓") note.textContent = ""; }, 2500);
+  });
+
+  $("#clear-saved-btn").addEventListener("click", () => {
+    if (!confirm("Clear all saved scores? This can't be undone.")) return;
+    writeScoreData({ latest: getScoreData().latest, history: [] });
+    renderSaved();
+  });
 }
 
 async function init() {
